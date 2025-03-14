@@ -67,7 +67,7 @@ class UserController extends Controller
         
         $users = $this->hCli->get( "{$this->apiHost}/api/v1/users", $getParams )->object();
 
-        $hasMoreUsers2 = ( $users->success == true ) ? true : false ;
+        $hasMoreUsers2 = $users->success;
         $users = $users->users ?? [] ;
 
         return view('users.more', compact('users', 'hasMoreUsers2'))->render();
