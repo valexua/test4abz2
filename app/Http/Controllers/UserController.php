@@ -63,17 +63,14 @@ class UserController extends Controller
         //log::info('req=',[Request::capture()->all()]);
         
         $page = request()->input('page');
-
         $getParams = [ "page" => $page, "count" => 6 ];
         
         $users = $this->hCli->get( "{$this->apiHost}/api/v1/users", $getParams )->object();
-                        
-        $users3 = $users->users ?? [] ;
+
         $hasMoreUsers2 = ( $users->success == true ) ? true : false ;
+        $users = $users->users ?? [] ;
 
-        $users2 = ( !$users3 ) ? [] : $users3;
-
-        return view('users.more', compact('users2', 'hasMoreUsers2'))->render();
+        return view('users.more', compact('users', 'hasMoreUsers2'))->render();
     }
 
 
