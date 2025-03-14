@@ -50,11 +50,10 @@ class UserController extends Controller
 
     function getApiUsers(int $page = 1, int $count = 6){
 
-        $resp = http::withHeaders([ "Token" => $this->token ])
-                ->get( "{$this->apiHost}/api/v1/users", [ "page" => $page, "count" => $count ] );
+        $resp = $this->hCli->get( "{$this->apiHost}/api/v1/users", [ "page" => $page, "count" => $count ] )->object();
 
         //dd($resp->body());
-        return json_decode($resp->body())?->users ?? [];
+        return $resp?->users ?? [];
 
 
     }
@@ -67,13 +66,10 @@ class UserController extends Controller
 
         $getParams = [ "page" => $page, "count" => 6 ];
         
-        $users = (http::withHeaders([ "Token" => $this->token ])
-                      ->get( "{$this->apiHost}/api/v1/users", 
-                              $getParams 
-                        ));
+        $users = $this->hCli->get( "{$this->apiHost}/api/v1/users", $getParams )->object();
                         
-        $users3 = (json_decode($users->body()))->users ?? (json_decode($users->body()))->success ;
-        $hasMoreUsers2 = ( json_decode($users->body())->success == true ) ? true : false ;
+        $users3 = $users->users ?? [] ;
+        $hasMoreUsers2 = ( $users->success == true ) ? true : false ;
 
         $users2 = ( !$users3 ) ? [] : $users3;
 
